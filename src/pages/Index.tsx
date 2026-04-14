@@ -152,7 +152,10 @@ const Index = () => {
           className="absolute -right-16 md:right-8 top-1/2 -translate-y-1/2 w-[150px] md:w-[200px] opacity-20 pointer-events-none select-none rotate-[15deg]"
         />
 
-        <div className="text-center mb-16 md:mb-24">
+        <div
+          ref={featuresHeading.ref}
+          className={`text-center mb-16 md:mb-24 transition-all duration-700 ${featuresHeading.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+        >
           <h2 className="font-display text-3xl sm:text-5xl md:text-6xl text-foreground">
             NOT YOUR GRANDMA'S
             <br />
@@ -163,12 +166,15 @@ const Index = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div ref={featuresGrid.ref} className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {features.map((feature, i) => (
             <div
               key={feature.title}
-              className="group relative border-2 border-border bg-card p-8 transition-all duration-300 hover:border-primary hover:-translate-y-1 hover:shadow-[0_0_30px_hsl(var(--primary)/0.15)]"
-              style={{ transform: `rotate(${i % 2 === 0 ? "-0.5" : "0.5"}deg)` }}
+              className={`group relative border-2 border-border bg-card p-8 transition-all duration-500 hover:border-primary hover:-translate-y-1 hover:shadow-[0_0_30px_hsl(var(--primary)/0.15)] ${featuresGrid.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}`}
+              style={{
+                transform: `rotate(${i % 2 === 0 ? "-0.5" : "0.5"}deg)`,
+                transitionDelay: featuresGrid.isVisible ? `${i * 150}ms` : "0ms",
+              }}
             >
               <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-primary/30 group-hover:border-primary transition-colors" />
               <div className="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-primary/30 group-hover:border-primary transition-colors" />
