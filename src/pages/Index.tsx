@@ -215,8 +215,10 @@ const Index = () => {
         </div>
       </section>
 
+      <MarqueeTicker />
+
       {/* ==================== FEATURES ==================== */}
-      <section className="relative z-10 py-24 md:py-32 px-6">
+      <section id="features" className="relative z-10 py-24 md:py-32 px-6">
         {/* Skate deck floating on the right side */}
         <img
           src={skatePickle}
@@ -267,6 +269,8 @@ const Index = () => {
         </div>
       </section>
 
+      <MarqueeTicker />
+
       {/* ==================== TESTIMONIALS ==================== */}
       <section className="relative z-10 py-24 md:py-32 px-6">
         <div
@@ -309,7 +313,7 @@ const Index = () => {
       </section>
 
       {/* ==================== PRICING ==================== */}
-      <section className="relative z-10 py-24 md:py-32 px-6">
+      <section id="pricing" className="relative z-10 py-24 md:py-32 px-6">
         <div
           ref={pricingSection.ref}
           className={`max-w-5xl mx-auto transition-all duration-700 ${pricingSection.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
