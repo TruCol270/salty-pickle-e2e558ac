@@ -385,7 +385,6 @@ const Index = () => {
 
       {/* ==================== BOTTOM CTA ==================== */}
       <section id="signup" className="relative z-10 py-24 md:py-32 px-6">
-      <section className="relative z-10 py-24 md:py-32 px-6">
         <div
           ref={bottomCta.ref}
           className={`max-w-3xl mx-auto text-center border-2 border-border p-12 md:p-16 relative bg-card transition-all duration-700 ${bottomCta.isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-16 scale-95"}`}
