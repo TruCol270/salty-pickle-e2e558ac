@@ -36,6 +36,10 @@ const Index = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
+  const featuresHeading = useScrollReveal<HTMLDivElement>();
+  const featuresGrid = useScrollReveal<HTMLDivElement>({ threshold: 0.1 });
+  const bottomCta = useScrollReveal<HTMLDivElement>({ threshold: 0.2 });
+
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = email.trim();
