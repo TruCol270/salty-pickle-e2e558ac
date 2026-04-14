@@ -3,6 +3,9 @@ import { Zap, Brain, CloudRain, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import skullPickle from "@/assets/skull-pickle.png";
+import spraySplatters from "@/assets/spray-splatters.png";
+import skatePickle from "@/assets/skate-pickle.png";
 
 const features = [
   {
@@ -62,13 +65,38 @@ const Index = () => {
       {/* Grain overlay */}
       <div className="grain-overlay" />
 
-      {/* Decorative splatter elements */}
-      <div className="absolute top-20 -left-20 w-64 h-64 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
-      <div className="absolute top-1/3 -right-20 w-80 h-80 rounded-full bg-secondary/5 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-20 left-1/4 w-48 h-48 rounded-full bg-accent/5 blur-3xl pointer-events-none" />
+      {/* Spray splatter - top right decorative */}
+      <img
+        src={spraySplatters}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        width={600}
+        height={400}
+        className="absolute top-0 right-0 w-[500px] opacity-15 pointer-events-none select-none rotate-12"
+      />
+      {/* Spray splatter - bottom left decorative */}
+      <img
+        src={spraySplatters}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        width={600}
+        height={400}
+        className="absolute bottom-0 left-0 w-[400px] opacity-10 pointer-events-none select-none -rotate-45 scale-x-[-1]"
+      />
 
       {/* ==================== HERO ==================== */}
       <section className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center">
+        {/* Skull pickle floating behind the headline */}
+        <img
+          src={skullPickle}
+          alt="Salty Pickle skull logo"
+          width={300}
+          height={300}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] md:w-[380px] opacity-10 pointer-events-none select-none"
+        />
+
         <p className="font-metal text-lg md:text-xl tracking-[0.3em] uppercase text-primary mb-4 animate-flicker">
           🥒 Salty Pickle
         </p>
@@ -78,13 +106,13 @@ const Index = () => {
           <span className="block text-primary mt-2">RUN DIRTY.</span>
         </h1>
 
-        <p className="mt-8 max-w-xl text-lg md:text-xl text-muted-foreground font-body leading-relaxed">
+        <p className="mt-8 max-w-xl text-lg md:text-xl text-muted-foreground font-body leading-relaxed relative z-10">
           AI-powered running plans that adapt to your life, your body, and your
           chaos. No cookie-cutter BS — just a plan that{" "}
           <span className="text-primary font-semibold scratch-underline">actually keeps up with you</span>.
         </p>
 
-        <div className="mt-10 flex flex-col sm:flex-row gap-4">
+        <div className="mt-10 flex flex-col sm:flex-row gap-4 relative z-10">
           <Button
             size="lg"
             className="glow-pulse bg-primary text-primary-foreground font-display text-lg px-10 py-6 uppercase tracking-wider border-2 border-primary hover:bg-primary/80 transition-all duration-200 hover:scale-105"
@@ -108,6 +136,17 @@ const Index = () => {
 
       {/* ==================== FEATURES ==================== */}
       <section className="relative z-10 py-24 md:py-32 px-6">
+        {/* Skate deck floating on the right side */}
+        <img
+          src={skatePickle}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          width={512}
+          height={1024}
+          className="absolute -right-16 md:right-8 top-1/2 -translate-y-1/2 w-[150px] md:w-[200px] opacity-20 pointer-events-none select-none rotate-[15deg]"
+        />
+
         <div className="text-center mb-16 md:mb-24">
           <h2 className="font-display text-3xl sm:text-5xl md:text-6xl text-foreground">
             NOT YOUR GRANDMA'S
@@ -146,6 +185,17 @@ const Index = () => {
         <div className="max-w-3xl mx-auto text-center border-2 border-border p-12 md:p-16 relative bg-card">
           <div className="absolute -top-3 left-1/4 w-24 h-6 bg-accent/80 -rotate-2" />
           <div className="absolute -top-3 right-1/4 w-20 h-6 bg-primary/80 rotate-1" />
+
+          {/* Small skull pickle accent */}
+          <img
+            src={skullPickle}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            width={120}
+            height={120}
+            className="absolute -bottom-10 -right-10 w-[100px] md:w-[120px] opacity-30 pointer-events-none select-none rotate-12"
+          />
 
           <h2 className="font-display text-3xl sm:text-5xl md:text-6xl text-foreground mb-6">
             STOP <span className="text-primary">RUNNING</span>
