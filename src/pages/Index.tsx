@@ -105,6 +105,8 @@ const Index = () => {
 
   const featuresHeading = useScrollReveal<HTMLDivElement>();
   const featuresGrid = useScrollReveal<HTMLDivElement>({ threshold: 0.1 });
+  const testimonialsSection = useScrollReveal<HTMLDivElement>({ threshold: 0.1 });
+  const pricingSection = useScrollReveal<HTMLDivElement>({ threshold: 0.1 });
   const bottomCta = useScrollReveal<HTMLDivElement>({ threshold: 0.2 });
 
   const handleSubscribe = async (e: React.FormEvent) => {
