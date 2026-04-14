@@ -4,6 +4,8 @@ import { Zap, Brain, CloudRain, TrendingUp, Quote, Check, X } from "lucide-react
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import StickyNav from "@/components/StickyNav";
+import MarqueeTicker from "@/components/MarqueeTicker";
 import skullPickle from "@/assets/skull-pickle.png";
 import spraySplatters from "@/assets/spray-splatters.png";
 import skatePickle from "@/assets/skate-pickle.png";
@@ -136,6 +138,7 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
+      <StickyNav />
       {/* Grain overlay */}
       <div className="grain-overlay" />
 
