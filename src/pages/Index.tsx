@@ -272,7 +272,7 @@ const Index = () => {
       <MarqueeTicker />
 
       {/* ==================== TESTIMONIALS ==================== */}
-      <section className="relative z-10 py-24 md:py-32 px-6">
+      <section id="testimonials" className="relative z-10 py-24 md:py-32 px-6">
         <div
           ref={testimonialsSection.ref}
           className={`max-w-5xl mx-auto transition-all duration-700 ${testimonialsSection.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
@@ -384,6 +384,7 @@ const Index = () => {
       </section>
 
       {/* ==================== BOTTOM CTA ==================== */}
+      <section id="signup" className="relative z-10 py-24 md:py-32 px-6">
       <section className="relative z-10 py-24 md:py-32 px-6">
         <div
           ref={bottomCta.ref}
