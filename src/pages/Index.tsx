@@ -7,6 +7,8 @@ import { useToast } from "@/hooks/use-toast";
 import skullPickle from "@/assets/skull-pickle.png";
 import spraySplatters from "@/assets/spray-splatters.png";
 import skatePickle from "@/assets/skate-pickle.png";
+import saltyPickleLogo from "@/assets/salty-pickle-logo.png";
+import saltyPickleIcon from "@/assets/salty-pickle-icon.png";
 
 const features = [
   {
@@ -102,9 +104,13 @@ const Index = () => {
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] md:w-[380px] opacity-10 pointer-events-none select-none"
         />
 
-        <p className="font-metal text-lg md:text-xl tracking-[0.3em] uppercase text-primary mb-4 animate-flicker">
-          🥒 Salty Pickle
-        </p>
+        <img
+          src={saltyPickleLogo}
+          alt="Salty Pickle"
+          width={400}
+          height={170}
+          className="w-[280px] sm:w-[350px] md:w-[420px] mb-6"
+        />
 
         <h1 className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl leading-none tracking-tight glitch-text">
           <span className="block text-foreground">TRAIN HARD.</span>
@@ -247,9 +253,12 @@ const Index = () => {
       {/* ==================== FOOTER ==================== */}
       <footer className="relative z-10 border-t border-border py-8 px-6">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-metal text-sm tracking-[0.2em] uppercase text-muted-foreground">
-            🥒 Salty Pickle © 2026
-          </p>
+          <div className="flex items-center gap-3">
+            <img src={saltyPickleIcon} alt="Salty Pickle" width={32} height={32} className="w-8 h-8" />
+            <span className="font-metal text-sm tracking-[0.2em] uppercase text-muted-foreground">
+              Salty Pickle © 2026
+            </span>
+          </div>
           <div className="flex gap-6 text-muted-foreground font-body text-sm">
             <a href="#" className="hover:text-primary transition-colors">GitHub</a>
             <a href="#" className="hover:text-primary transition-colors">Twitter</a>
