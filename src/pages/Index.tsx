@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useScrollReveal from "@/hooks/use-scroll-reveal";
 import { Zap, Brain, CloudRain, TrendingUp, Quote, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -104,6 +105,7 @@ const Index = () => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const featuresHeading = useScrollReveal<HTMLDivElement>();
   const featuresGrid = useScrollReveal<HTMLDivElement>({ threshold: 0.1 });
@@ -196,6 +198,7 @@ const Index = () => {
         <div className="mt-10 flex flex-col sm:flex-row gap-4 relative z-10">
           <Button
             size="lg"
+            onClick={() => navigate("/login")}
             className="glow-pulse bg-primary text-primary-foreground font-display text-lg px-10 py-6 uppercase tracking-wider border-2 border-primary hover:bg-primary/80 transition-all duration-200 hover:scale-105"
           >
             GET STARTED
