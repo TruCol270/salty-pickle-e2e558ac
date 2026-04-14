@@ -1,16 +1,170 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Zap, Brain, CloudRain, TrendingUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const features = [
+  {
+    icon: Brain,
+    title: "LEARNS YOUR BODY",
+    description: "Our AI doesn't just track miles — it reads your fatigue, recovery, and performance patterns like a psychic with a stopwatch.",
+  },
+  {
+    icon: Zap,
+    title: "ADAPTS ON THE FLY",
+    description: "Missed a run? Crushed a PR? Your plan reshuffles itself in real-time. No guilt trips, just gains.",
+  },
+  {
+    icon: CloudRain,
+    title: "WEATHER AWARE",
+    description: "Heat wave? Ice storm? Salty Pickle adjusts intensity and timing so you're not dying out there (unless you want to).",
+  },
+  {
+    icon: TrendingUp,
+    title: "RAW PROGRESS",
+    description: "No sugarcoating. See exactly where you're crushing it and where you need to grind harder. Stats with attitude.",
+  },
+];
+
+const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="relative min-h-screen overflow-hidden bg-background">
+      {/* Grain overlay */}
+      <div className="grain-overlay" />
+
+      {/* Decorative splatter elements */}
+      <div className="absolute top-20 -left-20 w-64 h-64 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
+      <div className="absolute top-1/3 -right-20 w-80 h-80 rounded-full bg-secondary/5 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 left-1/4 w-48 h-48 rounded-full bg-accent/5 blur-3xl pointer-events-none" />
+
+      {/* ==================== HERO ==================== */}
+      <section className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center">
+        {/* Brand name */}
+        <p className="font-metal text-lg md:text-xl tracking-[0.3em] uppercase text-primary mb-4 animate-flicker">
+          🥒 Salty Pickle
+        </p>
+
+        {/* Headline */}
+        <h1 className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl leading-none tracking-tight glitch-text">
+          <span className="block text-foreground">TRAIN HARD.</span>
+          <span className="block text-primary mt-2">RUN DIRTY.</span>
+        </h1>
+
+        {/* Subheadline */}
+        <p className="mt-8 max-w-xl text-lg md:text-xl text-muted-foreground font-body leading-relaxed">
+          AI-powered running plans that adapt to your life, your body, and your
+          chaos. No cookie-cutter BS — just a plan that{" "}
+          <span className="text-primary font-semibold scratch-underline">actually keeps up with you</span>.
+        </p>
+
+        {/* CTA */}
+        <div className="mt-10 flex flex-col sm:flex-row gap-4">
+          <Button
+            size="lg"
+            className="glow-pulse bg-primary text-primary-foreground font-display text-lg px-10 py-6 uppercase tracking-wider border-2 border-primary hover:bg-primary/80 transition-all duration-200 hover:scale-105"
+          >
+            GET STARTED
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            className="font-body text-lg px-10 py-6 uppercase tracking-wider border-2 border-muted-foreground/30 text-foreground hover:border-primary hover:text-primary transition-all duration-200"
+          >
+            LEARN MORE ↓
+          </Button>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground animate-bounce">
+          <span className="text-xs uppercase tracking-widest font-body">Scroll</span>
+          <div className="w-px h-8 bg-muted-foreground/40" />
+        </div>
+      </section>
+
+      {/* ==================== FEATURES ==================== */}
+      <section className="relative z-10 py-24 md:py-32 px-6">
+        {/* Section heading */}
+        <div className="text-center mb-16 md:mb-24">
+          <h2 className="font-display text-3xl sm:text-5xl md:text-6xl text-foreground">
+            NOT YOUR GRANDMA'S
+            <br />
+            <span className="text-secondary">TRAINING PLAN</span>
+          </h2>
+          <p className="mt-6 text-muted-foreground font-body text-lg max-w-lg mx-auto">
+            Powered by LLMs. Fueled by chaos. Built for runners who don't do "easy."
+          </p>
+        </div>
+
+        {/* Feature cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          {features.map((feature, i) => (
+            <div
+              key={feature.title}
+              className="group relative border-2 border-border bg-card p-8 transition-all duration-300 hover:border-primary hover:-translate-y-1 hover:shadow-[0_0_30px_hsl(var(--primary)/0.15)]"
+              style={{ transform: `rotate(${i % 2 === 0 ? "-0.5" : "0.5"}deg)` }}
+            >
+              {/* Corner accent */}
+              <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-primary/30 group-hover:border-primary transition-colors" />
+              <div className="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-primary/30 group-hover:border-primary transition-colors" />
+
+              <feature.icon className="w-10 h-10 text-primary mb-4 group-hover:animate-slam-in" />
+              <h3 className="font-display text-xl md:text-2xl text-foreground mb-3">
+                {feature.title}
+              </h3>
+              <p className="text-muted-foreground font-body leading-relaxed text-sm md:text-base">
+                {feature.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ==================== BOTTOM CTA ==================== */}
+      <section className="relative z-10 py-24 md:py-32 px-6">
+        <div className="max-w-3xl mx-auto text-center border-2 border-border p-12 md:p-16 relative bg-card">
+          {/* Decorative tape strips */}
+          <div className="absolute -top-3 left-1/4 w-24 h-6 bg-accent/80 -rotate-2" />
+          <div className="absolute -top-3 right-1/4 w-20 h-6 bg-primary/80 rotate-1" />
+
+          <h2 className="font-display text-3xl sm:text-5xl md:text-6xl text-foreground mb-6">
+            STOP <span className="text-primary">RUNNING</span>
+            <br />
+            BORING PLANS
+          </h2>
+          <p className="text-muted-foreground font-body text-lg mb-10 max-w-md mx-auto">
+            Sign up and let Salty Pickle build you a training plan that's as unpredictable as your life.
+          </p>
+
+          {/* Email signup form */}
+          <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <input
+              type="email"
+              placeholder="your@email.com"
+              className="flex-1 px-4 py-3 bg-background border-2 border-border text-foreground font-body placeholder:text-muted-foreground focus:border-primary focus:outline-none transition-colors"
+            />
+            <Button
+              size="lg"
+              className="bg-primary text-primary-foreground font-display text-base px-8 py-3 uppercase tracking-wider border-2 border-primary hover:bg-primary/80 transition-all duration-200 hover:scale-105 whitespace-nowrap"
+            >
+              LET'S GO 🔥
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== FOOTER ==================== */}
+      <footer className="relative z-10 border-t border-border py-8 px-6">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="font-metal text-sm tracking-[0.2em] uppercase text-muted-foreground">
+            🥒 Salty Pickle © 2026
+          </p>
+          <div className="flex gap-6 text-muted-foreground font-body text-sm">
+            <a href="#" className="hover:text-primary transition-colors">GitHub</a>
+            <a href="#" className="hover:text-primary transition-colors">Twitter</a>
+            <a href="#" className="hover:text-primary transition-colors">Discord</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
