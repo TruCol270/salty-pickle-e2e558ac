@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { Zap, Brain, CloudRain, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const features = [
   {
@@ -25,6 +28,35 @@ const features = [
 ];
 
 const Index = () => {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = email.trim();
+    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      toast({ title: "Invalid email", description: "Enter a real email, pickle.", variant: "destructive" });
+      return;
+    }
+
+    setIsSubmitting(true);
+    const { error } = await supabase.from("email_subscribers").insert({ email: trimmed });
+    setIsSubmitting(false);
+
+    if (error) {
+      if (error.code === "23505") {
+        toast({ title: "Already signed up! 🥒", description: "You're already on the list. We see you." });
+      } else {
+        toast({ title: "Something broke", description: "Try again in a sec.", variant: "destructive" });
+      }
+      return;
+    }
+
+    toast({ title: "You're in! 🔥", description: "Welcome to the pickle club. We'll be in touch." });
+    setEmail("");
+  };
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
       {/* Grain overlay */}
@@ -37,25 +69,21 @@ const Index = () => {
 
       {/* ==================== HERO ==================== */}
       <section className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center">
-        {/* Brand name */}
         <p className="font-metal text-lg md:text-xl tracking-[0.3em] uppercase text-primary mb-4 animate-flicker">
           🥒 Salty Pickle
         </p>
 
-        {/* Headline */}
         <h1 className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl leading-none tracking-tight glitch-text">
           <span className="block text-foreground">TRAIN HARD.</span>
           <span className="block text-primary mt-2">RUN DIRTY.</span>
         </h1>
 
-        {/* Subheadline */}
         <p className="mt-8 max-w-xl text-lg md:text-xl text-muted-foreground font-body leading-relaxed">
           AI-powered running plans that adapt to your life, your body, and your
           chaos. No cookie-cutter BS — just a plan that{" "}
           <span className="text-primary font-semibold scratch-underline">actually keeps up with you</span>.
         </p>
 
-        {/* CTA */}
         <div className="mt-10 flex flex-col sm:flex-row gap-4">
           <Button
             size="lg"
@@ -72,7 +100,6 @@ const Index = () => {
           </Button>
         </div>
 
-        {/* Scroll indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground animate-bounce">
           <span className="text-xs uppercase tracking-widest font-body">Scroll</span>
           <div className="w-px h-8 bg-muted-foreground/40" />
@@ -81,7 +108,6 @@ const Index = () => {
 
       {/* ==================== FEATURES ==================== */}
       <section className="relative z-10 py-24 md:py-32 px-6">
-        {/* Section heading */}
         <div className="text-center mb-16 md:mb-24">
           <h2 className="font-display text-3xl sm:text-5xl md:text-6xl text-foreground">
             NOT YOUR GRANDMA'S
@@ -93,7 +119,6 @@ const Index = () => {
           </p>
         </div>
 
-        {/* Feature cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {features.map((feature, i) => (
             <div
@@ -101,7 +126,6 @@ const Index = () => {
               className="group relative border-2 border-border bg-card p-8 transition-all duration-300 hover:border-primary hover:-translate-y-1 hover:shadow-[0_0_30px_hsl(var(--primary)/0.15)]"
               style={{ transform: `rotate(${i % 2 === 0 ? "-0.5" : "0.5"}deg)` }}
             >
-              {/* Corner accent */}
               <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-primary/30 group-hover:border-primary transition-colors" />
               <div className="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-primary/30 group-hover:border-primary transition-colors" />
 
@@ -120,7 +144,6 @@ const Index = () => {
       {/* ==================== BOTTOM CTA ==================== */}
       <section className="relative z-10 py-24 md:py-32 px-6">
         <div className="max-w-3xl mx-auto text-center border-2 border-border p-12 md:p-16 relative bg-card">
-          {/* Decorative tape strips */}
           <div className="absolute -top-3 left-1/4 w-24 h-6 bg-accent/80 -rotate-2" />
           <div className="absolute -top-3 right-1/4 w-20 h-6 bg-primary/80 rotate-1" />
 
@@ -133,20 +156,27 @@ const Index = () => {
             Sign up and let Salty Pickle build you a training plan that's as unpredictable as your life.
           </p>
 
-          {/* Email signup form */}
-          <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="your@email.com"
+              required
               className="flex-1 px-4 py-3 bg-background border-2 border-border text-foreground font-body placeholder:text-muted-foreground focus:border-primary focus:outline-none transition-colors"
             />
             <Button
+              type="submit"
               size="lg"
-              className="bg-primary text-primary-foreground font-display text-base px-8 py-3 uppercase tracking-wider border-2 border-primary hover:bg-primary/80 transition-all duration-200 hover:scale-105 whitespace-nowrap"
+              disabled={isSubmitting}
+              className="bg-primary text-primary-foreground font-display text-base px-8 py-3 uppercase tracking-wider border-2 border-primary hover:bg-primary/80 transition-all duration-200 hover:scale-105 whitespace-nowrap disabled:opacity-50"
             >
-              LET'S GO 🔥
+              {isSubmitting ? "HOLD ON..." : "LET'S GO 🔥"}
             </Button>
-          </div>
+          </form>
+          <p className="mt-4 text-xs text-muted-foreground font-body">
+            By signing up you agree to let a pickle coach you. No spam, just gains.
+          </p>
         </div>
       </section>
 
