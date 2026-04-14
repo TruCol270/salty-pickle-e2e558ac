@@ -13,6 +13,11 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        display: ['"Rubik Dirt"', 'cursive'],
+        metal: ['"Metal Mania"', 'cursive'],
+        body: ['Inter', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -65,25 +70,34 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "skate-in": {
+          from: { transform: "translateX(-100%) rotate(-5deg)", opacity: "0" },
+          to: { transform: "translateX(0) rotate(0)", opacity: "1" },
+        },
+        "slam-in": {
+          "0%": { transform: "scale(3) rotate(-3deg)", opacity: "0" },
+          "60%": { transform: "scale(0.95) rotate(1deg)", opacity: "1" },
+          "100%": { transform: "scale(1) rotate(0)", opacity: "1" },
+        },
+        "flicker": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.8" },
+          "75%": { opacity: "0.95" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "skate-in": "skate-in 0.6s ease-out",
+        "slam-in": "slam-in 0.4s ease-out",
+        "flicker": "flicker 4s infinite",
       },
     },
   },
