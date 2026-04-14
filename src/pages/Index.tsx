@@ -4,6 +4,8 @@ import { Zap, Brain, CloudRain, TrendingUp, Quote, Check, X } from "lucide-react
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import StickyNav from "@/components/StickyNav";
+import MarqueeTicker from "@/components/MarqueeTicker";
 import skullPickle from "@/assets/skull-pickle.png";
 import spraySplatters from "@/assets/spray-splatters.png";
 import skatePickle from "@/assets/skate-pickle.png";
@@ -136,6 +138,7 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
+      <StickyNav />
       {/* Grain overlay */}
       <div className="grain-overlay" />
 
@@ -212,8 +215,10 @@ const Index = () => {
         </div>
       </section>
 
+      <MarqueeTicker />
+
       {/* ==================== FEATURES ==================== */}
-      <section className="relative z-10 py-24 md:py-32 px-6">
+      <section id="features" className="relative z-10 py-24 md:py-32 px-6">
         {/* Skate deck floating on the right side */}
         <img
           src={skatePickle}
@@ -264,8 +269,10 @@ const Index = () => {
         </div>
       </section>
 
+      <MarqueeTicker />
+
       {/* ==================== TESTIMONIALS ==================== */}
-      <section className="relative z-10 py-24 md:py-32 px-6">
+      <section id="testimonials" className="relative z-10 py-24 md:py-32 px-6">
         <div
           ref={testimonialsSection.ref}
           className={`max-w-5xl mx-auto transition-all duration-700 ${testimonialsSection.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
@@ -306,7 +313,7 @@ const Index = () => {
       </section>
 
       {/* ==================== PRICING ==================== */}
-      <section className="relative z-10 py-24 md:py-32 px-6">
+      <section id="pricing" className="relative z-10 py-24 md:py-32 px-6">
         <div
           ref={pricingSection.ref}
           className={`max-w-5xl mx-auto transition-all duration-700 ${pricingSection.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
@@ -377,7 +384,7 @@ const Index = () => {
       </section>
 
       {/* ==================== BOTTOM CTA ==================== */}
-      <section className="relative z-10 py-24 md:py-32 px-6">
+      <section id="signup" className="relative z-10 py-24 md:py-32 px-6">
         <div
           ref={bottomCta.ref}
           className={`max-w-3xl mx-auto text-center border-2 border-border p-12 md:p-16 relative bg-card transition-all duration-700 ${bottomCta.isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-16 scale-95"}`}

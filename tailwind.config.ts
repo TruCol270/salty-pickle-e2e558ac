@@ -91,6 +91,10 @@ export default {
           "50%": { opacity: "0.8" },
           "75%": { opacity: "0.95" },
         },
+        "marquee": {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -98,6 +102,7 @@ export default {
         "skate-in": "skate-in 0.6s ease-out",
         "slam-in": "slam-in 0.4s ease-out",
         "flicker": "flicker 4s infinite",
+        "marquee": "marquee 20s linear infinite",
       },
     },
   },
