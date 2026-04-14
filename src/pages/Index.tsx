@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useScrollReveal from "@/hooks/use-scroll-reveal";
-import { Zap, Brain, CloudRain, TrendingUp } from "lucide-react";
+import { Zap, Brain, CloudRain, TrendingUp, Quote, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
