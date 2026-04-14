@@ -33,6 +33,71 @@ const features = [
   },
 ];
 
+const testimonials = [
+  {
+    quote: "I told Salty Pickle I ran a half marathon hungover and it just... adjusted. No judgment. Respect.",
+    name: "Jess K.",
+    detail: "Ultra runner, 3x DNF survivor",
+  },
+  {
+    quote: "My old plan had me doing tempo runs in a thunderstorm. Salty Pickle told me to stay home and stretch. It gets me.",
+    name: "Marcus D.",
+    detail: "Marathon PB: 3:12",
+  },
+  {
+    quote: "I skipped two weeks for a surf trip. Came back to a plan that actually made sense. This pickle is smarter than my coach.",
+    name: "Tara L.",
+    detail: "Trail runner & chaos agent",
+  },
+];
+
+const pricingTiers = [
+  {
+    name: "FREE PICKLE",
+    price: "$0",
+    description: "Dip your toes in the brine",
+    features: [
+      { text: "Basic adaptive plan", included: true },
+      { text: "Weekly adjustments", included: true },
+      { text: "Community access", included: true },
+      { text: "Weather integration", included: false },
+      { text: "AI coaching insights", included: false },
+    ],
+    cta: "START FREE",
+    highlighted: false,
+  },
+  {
+    name: "SALTY PRO",
+    price: "$9",
+    period: "/mo",
+    description: "For runners who mean business",
+    features: [
+      { text: "Full adaptive AI plan", included: true },
+      { text: "Daily adjustments", included: true },
+      { text: "Weather & fatigue aware", included: true },
+      { text: "AI coaching insights", included: true },
+      { text: "Priority support", included: false },
+    ],
+    cta: "GO PRO",
+    highlighted: true,
+  },
+  {
+    name: "ELITE BRINE",
+    price: "$19",
+    period: "/mo",
+    description: "Unlimited chaos, unlimited gains",
+    features: [
+      { text: "Everything in Pro", included: true },
+      { text: "Real-time plan shifts", included: true },
+      { text: "Race strategy AI", included: true },
+      { text: "1-on-1 AI coaching", included: true },
+      { text: "Priority support", included: true },
+    ],
+    cta: "GO ELITE",
+    highlighted: false,
+  },
+];
+
 const Index = () => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
