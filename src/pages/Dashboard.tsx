@@ -125,8 +125,10 @@ export default function Dashboard() {
       });
 
       const dist = weekWorkouts.reduce((s, w) => s + (w.distance || 0), 0) / 1000;
+      const time = weekWorkouts.reduce((s, w) => s + (w.moving_time || 0), 0) / 60; // minutes
+      const pace = dist > 0 ? Math.round((time / dist) * 10) / 10 : null; // min/km
       const label = i === 0 ? "This wk" : i === 1 ? "Last wk" : `${i}w ago`;
-      weeks.push({ label, distance: Math.round(dist * 10) / 10, count: weekWorkouts.length });
+      weeks.push({ label, distance: Math.round(dist * 10) / 10, count: weekWorkouts.length, pace });
     }
     return weeks;
   }, [allWorkouts]);
