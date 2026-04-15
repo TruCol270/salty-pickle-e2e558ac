@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
@@ -10,8 +10,10 @@ import {
   Calendar,
   Heart,
   ChevronRight,
+  BarChart3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 interface ActivePlan {
   id: string;
@@ -68,6 +70,7 @@ export default function Dashboard() {
   const { integrations } = useAuth();
   const [activePlan, setActivePlan] = useState<ActivePlan | null>(null);
   const [recentWorkouts, setRecentWorkouts] = useState<Workout[]>([]);
+  const [allWorkouts, setAllWorkouts] = useState<Workout[]>([]);
   const [upcoming, setUpcoming] = useState<CalendarEvent[]>([]);
   const [recovery, setRecovery] = useState<RecoveryData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -76,16 +79,19 @@ export default function Dashboard() {
     Promise.allSettled([
       api.get<ActivePlan>("/api/v1/plans/active"),
       api.get<Workout[]>("/api/v1/workouts?limit=5"),
+      api.get<Workout[]>("/api/v1/workouts?limit=100"),
       api.get<CalendarEvent[]>("/api/v1/calendar/events?days=7"),
       api.get<RecoveryData | RecoveryData[]>("/api/v1/whoop/recovery"),
-    ]).then(([planRes, workoutsRes, calRes, recRes]) => {
+    ]).then(([planRes, workoutsRes, allWorkoutsRes, calRes, recRes]) => {
       if (planRes.status === "fulfilled") setActivePlan(planRes.value);
       if (workoutsRes.status === "fulfilled") {
         setRecentWorkouts(Array.isArray(workoutsRes.value) ? workoutsRes.value : []);
       }
+      if (allWorkoutsRes.status === "fulfilled") {
+        setAllWorkouts(Array.isArray(allWorkoutsRes.value) ? allWorkoutsRes.value : []);
+      }
       if (calRes.status === "fulfilled") {
         const arr = Array.isArray(calRes.value) ? calRes.value : [];
-        // Only future events
         const now = new Date();
         setUpcoming(
           arr
@@ -101,6 +107,29 @@ export default function Dashboard() {
       setLoading(false);
     });
   }, []);
+
+  // Compute weekly volume for last 4 weeks
+  const weeklyVolume = useMemo(() => {
+    const now = new Date();
+    const weeks: { label: string; distance: number; count: number }[] = [];
+    for (let i = 3; i >= 0; i--) {
+      const weekEnd = new Date(now);
+      weekEnd.setDate(now.getDate() - i * 7);
+      const weekStart = new Date(weekEnd);
+      weekStart.setDate(weekEnd.getDate() - 7);
+      
+      const weekWorkouts = allWorkouts.filter((w) => {
+        if (!w.start_date) return false;
+        const d = new Date(w.start_date);
+        return d >= weekStart && d < weekEnd;
+      });
+
+      const dist = weekWorkouts.reduce((s, w) => s + (w.distance || 0), 0) / 1000;
+      const label = i === 0 ? "This wk" : i === 1 ? "Last wk" : `${i}w ago`;
+      weeks.push({ label, distance: Math.round(dist * 10) / 10, count: weekWorkouts.length });
+    }
+    return weeks;
+  }, [allWorkouts]);
 
   if (loading) {
     return (
@@ -143,6 +172,64 @@ export default function Dashboard() {
           value={recovery?.recovery_score != null ? `${Math.round(recovery.recovery_score)}%` : "—"}
           valueClass={recovery?.recovery_score != null ? recoveryColor(recovery.recovery_score) : undefined}
         />
+      </div>
+
+      {/* Weekly Volume Chart */}
+      <div className="border-2 border-border bg-card p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <BarChart3 className="w-5 h-5 text-accent" />
+          <h2 className="font-display text-lg text-foreground">WEEKLY VOLUME</h2>
+          <span className="text-muted-foreground font-body text-xs ml-auto">Last 4 weeks</span>
+        </div>
+        {weeklyVolume.some((w) => w.distance > 0) ? (
+          <div className="h-48">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={weeklyVolume} barCategoryGap="20%">
+                <XAxis
+                  dataKey="label"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "hsl(0 0% 55%)", fontSize: 12, fontFamily: "Inter" }}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "hsl(0 0% 55%)", fontSize: 11, fontFamily: "Inter" }}
+                  tickFormatter={(v) => `${v} km`}
+                  width={55}
+                />
+                <Tooltip
+                  contentStyle={{
+                    background: "hsl(0 0% 10%)",
+                    border: "1px solid hsl(0 0% 18%)",
+                    borderRadius: "4px",
+                    fontFamily: "Inter",
+                    fontSize: 12,
+                  }}
+                  labelStyle={{ color: "hsl(60 10% 92%)", fontWeight: 600 }}
+                  formatter={(value: number, _name: string, props: { payload: { count: number } }) => [
+                    `${value} km (${props.payload.count} runs)`,
+                    "Distance",
+                  ]}
+                />
+                <Bar dataKey="distance" radius={[4, 4, 0, 0]}>
+                  {weeklyVolume.map((_, i) => (
+                    <Cell
+                      key={i}
+                      fill={i === weeklyVolume.length - 1 ? "hsl(82 100% 50%)" : "hsl(82 100% 50% / 0.4)"}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        ) : (
+          <div className="h-48 flex items-center justify-center">
+            <p className="text-muted-foreground font-body text-sm">
+              No workout data yet. Sync your workouts to see volume trends.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Recovery + Plan row */}
