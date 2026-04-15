@@ -70,6 +70,7 @@ export default function Dashboard() {
   const { integrations } = useAuth();
   const [activePlan, setActivePlan] = useState<ActivePlan | null>(null);
   const [recentWorkouts, setRecentWorkouts] = useState<Workout[]>([]);
+  const [allWorkouts, setAllWorkouts] = useState<Workout[]>([]);
   const [upcoming, setUpcoming] = useState<CalendarEvent[]>([]);
   const [recovery, setRecovery] = useState<RecoveryData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -78,16 +79,19 @@ export default function Dashboard() {
     Promise.allSettled([
       api.get<ActivePlan>("/api/v1/plans/active"),
       api.get<Workout[]>("/api/v1/workouts?limit=5"),
+      api.get<Workout[]>("/api/v1/workouts?limit=100"),
       api.get<CalendarEvent[]>("/api/v1/calendar/events?days=7"),
       api.get<RecoveryData | RecoveryData[]>("/api/v1/whoop/recovery"),
-    ]).then(([planRes, workoutsRes, calRes, recRes]) => {
+    ]).then(([planRes, workoutsRes, allWorkoutsRes, calRes, recRes]) => {
       if (planRes.status === "fulfilled") setActivePlan(planRes.value);
       if (workoutsRes.status === "fulfilled") {
         setRecentWorkouts(Array.isArray(workoutsRes.value) ? workoutsRes.value : []);
       }
+      if (allWorkoutsRes.status === "fulfilled") {
+        setAllWorkouts(Array.isArray(allWorkoutsRes.value) ? allWorkoutsRes.value : []);
+      }
       if (calRes.status === "fulfilled") {
         const arr = Array.isArray(calRes.value) ? calRes.value : [];
-        // Only future events
         const now = new Date();
         setUpcoming(
           arr
@@ -103,6 +107,29 @@ export default function Dashboard() {
       setLoading(false);
     });
   }, []);
+
+  // Compute weekly volume for last 4 weeks
+  const weeklyVolume = useMemo(() => {
+    const now = new Date();
+    const weeks: { label: string; distance: number; count: number }[] = [];
+    for (let i = 3; i >= 0; i--) {
+      const weekEnd = new Date(now);
+      weekEnd.setDate(now.getDate() - i * 7);
+      const weekStart = new Date(weekEnd);
+      weekStart.setDate(weekEnd.getDate() - 7);
+      
+      const weekWorkouts = allWorkouts.filter((w) => {
+        if (!w.start_date) return false;
+        const d = new Date(w.start_date);
+        return d >= weekStart && d < weekEnd;
+      });
+
+      const dist = weekWorkouts.reduce((s, w) => s + (w.distance || 0), 0) / 1000;
+      const label = i === 0 ? "This wk" : i === 1 ? "Last wk" : `${i}w ago`;
+      weeks.push({ label, distance: Math.round(dist * 10) / 10, count: weekWorkouts.length });
+    }
+    return weeks;
+  }, [allWorkouts]);
 
   if (loading) {
     return (
