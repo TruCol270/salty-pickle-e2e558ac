@@ -172,16 +172,39 @@ export default function CalendarPage() {
   );
 }
 
+const WORKOUT_COLORS: Record<string, { dot: string; border: string; label: string }> = {
+  easy: { dot: "bg-green-500", border: "hover:border-green-500/40", label: "text-green-400" },
+  recovery: { dot: "bg-green-500", border: "hover:border-green-500/40", label: "text-green-400" },
+  long: { dot: "bg-blue-500", border: "hover:border-blue-500/40", label: "text-blue-400" },
+  interval: { dot: "bg-red-500", border: "hover:border-red-500/40", label: "text-red-400" },
+  intervals: { dot: "bg-red-500", border: "hover:border-red-500/40", label: "text-red-400" },
+  speed: { dot: "bg-red-500", border: "hover:border-red-500/40", label: "text-red-400" },
+  tempo: { dot: "bg-orange-500", border: "hover:border-orange-500/40", label: "text-orange-400" },
+  threshold: { dot: "bg-orange-500", border: "hover:border-orange-500/40", label: "text-orange-400" },
+  race: { dot: "bg-pink-500", border: "hover:border-pink-500/40", label: "text-pink-400" },
+  rest: { dot: "bg-muted-foreground", border: "hover:border-muted-foreground/40", label: "text-muted-foreground" },
+  cross: { dot: "bg-purple-500", border: "hover:border-purple-500/40", label: "text-purple-400" },
+};
+
+function getWorkoutColor(event: CalendarEvent) {
+  const text = `${event.type || ""} ${event.title || ""} ${event.summary || ""}`.toLowerCase();
+  for (const [key, colors] of Object.entries(WORKOUT_COLORS)) {
+    if (text.includes(key)) return colors;
+  }
+  return { dot: "bg-primary", border: "hover:border-primary/40", label: "text-primary" };
+}
+
 function EventCard({ event }: { event: CalendarEvent }) {
+  const colors = getWorkoutColor(event);
   return (
-    <div className="border border-border bg-card p-4 flex items-center gap-4 hover:border-primary/40 transition-colors">
-      <div className="w-2 h-2 rounded-full bg-primary shrink-0" />
+    <div className={`border border-border bg-card p-4 flex items-center gap-4 ${colors.border} transition-colors`}>
+      <div className={`w-2 h-2 rounded-full ${colors.dot} shrink-0`} />
       <div className="flex-1 min-w-0">
         <p className="text-foreground font-body text-sm truncate">
           {event.title || event.summary || "Training event"}
         </p>
         {event.type && (
-          <p className="text-muted-foreground font-body text-xs mt-0.5">{event.type}</p>
+          <p className={`${colors.label} font-body text-xs mt-0.5 uppercase tracking-wider`}>{event.type}</p>
         )}
       </div>
       {event.start && (
