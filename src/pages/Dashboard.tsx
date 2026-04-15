@@ -111,7 +111,7 @@ export default function Dashboard() {
   // Compute weekly volume for last 4 weeks
   const weeklyVolume = useMemo(() => {
     const now = new Date();
-    const weeks: { label: string; distance: number; count: number }[] = [];
+    const weeks: { label: string; distance: number; count: number; pace: number | null }[] = [];
     for (let i = 3; i >= 0; i--) {
       const weekEnd = new Date(now);
       weekEnd.setDate(now.getDate() - i * 7);
