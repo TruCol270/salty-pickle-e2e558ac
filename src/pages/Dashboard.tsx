@@ -13,7 +13,7 @@ import {
   BarChart3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Line, ComposedChart } from "recharts";
 
 interface ActivePlan {
   id: string;
@@ -111,7 +111,7 @@ export default function Dashboard() {
   // Compute weekly volume for last 4 weeks
   const weeklyVolume = useMemo(() => {
     const now = new Date();
-    const weeks: { label: string; distance: number; count: number }[] = [];
+    const weeks: { label: string; distance: number; count: number; pace: number | null }[] = [];
     for (let i = 3; i >= 0; i--) {
       const weekEnd = new Date(now);
       weekEnd.setDate(now.getDate() - i * 7);
@@ -125,8 +125,10 @@ export default function Dashboard() {
       });
 
       const dist = weekWorkouts.reduce((s, w) => s + (w.distance || 0), 0) / 1000;
+      const time = weekWorkouts.reduce((s, w) => s + (w.moving_time || 0), 0) / 60; // minutes
+      const pace = dist > 0 ? Math.round((time / dist) * 10) / 10 : null; // min/km
       const label = i === 0 ? "This wk" : i === 1 ? "Last wk" : `${i}w ago`;
-      weeks.push({ label, distance: Math.round(dist * 10) / 10, count: weekWorkouts.length });
+      weeks.push({ label, distance: Math.round(dist * 10) / 10, count: weekWorkouts.length, pace });
     }
     return weeks;
   }, [allWorkouts]);
@@ -179,12 +181,15 @@ export default function Dashboard() {
         <div className="flex items-center gap-2 mb-4">
           <BarChart3 className="w-5 h-5 text-accent" />
           <h2 className="font-display text-lg text-foreground">WEEKLY VOLUME</h2>
-          <span className="text-muted-foreground font-body text-xs ml-auto">Last 4 weeks</span>
+          <span className="text-muted-foreground font-body text-xs ml-auto flex items-center gap-3">
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-primary inline-block" /> Distance</span>
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-secondary inline-block" /> Pace</span>
+          </span>
         </div>
         {weeklyVolume.some((w) => w.distance > 0) ? (
           <div className="h-48">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={weeklyVolume} barCategoryGap="20%">
+              <ComposedChart data={weeklyVolume} barCategoryGap="20%">
                 <XAxis
                   dataKey="label"
                   axisLine={false}
@@ -192,11 +197,23 @@ export default function Dashboard() {
                   tick={{ fill: "hsl(0 0% 55%)", fontSize: 12, fontFamily: "Inter" }}
                 />
                 <YAxis
+                  yAxisId="distance"
                   axisLine={false}
                   tickLine={false}
                   tick={{ fill: "hsl(0 0% 55%)", fontSize: 11, fontFamily: "Inter" }}
                   tickFormatter={(v) => `${v} km`}
                   width={55}
+                />
+                <YAxis
+                  yAxisId="pace"
+                  orientation="right"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "hsl(330 100% 55%)", fontSize: 11, fontFamily: "Inter" }}
+                  tickFormatter={(v) => `${v}`}
+                  width={45}
+                  reversed
+                  domain={["dataMin - 0.5", "dataMax + 0.5"]}
                 />
                 <Tooltip
                   contentStyle={{
@@ -207,12 +224,12 @@ export default function Dashboard() {
                     fontSize: 12,
                   }}
                   labelStyle={{ color: "hsl(60 10% 92%)", fontWeight: 600 }}
-                  formatter={(value: number, _name: string, props: { payload: { count: number } }) => [
-                    `${value} km (${props.payload.count} runs)`,
-                    "Distance",
-                  ]}
+                  formatter={(value: number, name: string) => {
+                    if (name === "pace") return value ? [`${value} min/km`, "Avg Pace"] : ["—", "Avg Pace"];
+                    return [`${value} km`, "Distance"];
+                  }}
                 />
-                <Bar dataKey="distance" radius={[4, 4, 0, 0]}>
+                <Bar dataKey="distance" yAxisId="distance" radius={[4, 4, 0, 0]}>
                   {weeklyVolume.map((_, i) => (
                     <Cell
                       key={i}
@@ -220,7 +237,16 @@ export default function Dashboard() {
                     />
                   ))}
                 </Bar>
-              </BarChart>
+                <Line
+                  yAxisId="pace"
+                  type="monotone"
+                  dataKey="pace"
+                  stroke="hsl(330 100% 55%)"
+                  strokeWidth={2}
+                  dot={{ fill: "hsl(330 100% 55%)", r: 4, strokeWidth: 0 }}
+                  connectNulls
+                />
+              </ComposedChart>
             </ResponsiveContainer>
           </div>
         ) : (
