@@ -12,6 +12,7 @@ import AuthCallback from "./pages/AuthCallback";
 import Dashboard from "./pages/Dashboard";
 import Workouts from "./pages/Workouts";
 import Plans from "./pages/Plans";
+import PlanDetail from "./pages/PlanDetail";
 import CalendarPage from "./pages/CalendarPage";
 import Analytics from "./pages/Analytics";
 import Preferences from "./pages/Preferences";
@@ -43,6 +44,7 @@ const App = () => (
               <Route index element={<Dashboard />} />
               <Route path="workouts" element={<Workouts />} />
               <Route path="plans" element={<Plans />} />
+              <Route path="plans/:planId" element={<PlanDetail />} />
               <Route path="calendar" element={<CalendarPage />} />
               <Route path="analytics" element={<Analytics />} />
               <Route path="preferences" element={<Preferences />} />
