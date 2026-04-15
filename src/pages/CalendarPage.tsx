@@ -93,6 +93,24 @@ export default function CalendarPage() {
         </button>
       </div>
 
+      {/* Workout type legend */}
+      <div className="flex flex-wrap gap-x-5 gap-y-2">
+        {[
+          { label: "Easy / Recovery", color: "bg-green-500" },
+          { label: "Long Run", color: "bg-blue-500" },
+          { label: "Interval / Speed", color: "bg-red-500" },
+          { label: "Tempo / Threshold", color: "bg-orange-500" },
+          { label: "Race", color: "bg-pink-500" },
+          { label: "Cross-training", color: "bg-purple-500" },
+          { label: "Rest", color: "bg-muted-foreground" },
+        ].map((item) => (
+          <div key={item.label} className="flex items-center gap-1.5">
+            <div className={`w-2.5 h-2.5 rounded-full ${item.color} shrink-0`} />
+            <span className="text-muted-foreground font-body text-xs">{item.label}</span>
+          </div>
+        ))}
+      </div>
+
       {loading ? (
         <div className="text-primary font-display text-xl animate-pulse text-center py-16">
           LOADING...
