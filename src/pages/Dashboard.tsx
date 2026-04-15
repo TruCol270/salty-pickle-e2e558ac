@@ -174,6 +174,64 @@ export default function Dashboard() {
         />
       </div>
 
+      {/* Weekly Volume Chart */}
+      <div className="border-2 border-border bg-card p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <BarChart3 className="w-5 h-5 text-accent" />
+          <h2 className="font-display text-lg text-foreground">WEEKLY VOLUME</h2>
+          <span className="text-muted-foreground font-body text-xs ml-auto">Last 4 weeks</span>
+        </div>
+        {weeklyVolume.some((w) => w.distance > 0) ? (
+          <div className="h-48">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={weeklyVolume} barCategoryGap="20%">
+                <XAxis
+                  dataKey="label"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "hsl(0 0% 55%)", fontSize: 12, fontFamily: "Inter" }}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "hsl(0 0% 55%)", fontSize: 11, fontFamily: "Inter" }}
+                  tickFormatter={(v) => `${v} km`}
+                  width={55}
+                />
+                <Tooltip
+                  contentStyle={{
+                    background: "hsl(0 0% 10%)",
+                    border: "1px solid hsl(0 0% 18%)",
+                    borderRadius: "4px",
+                    fontFamily: "Inter",
+                    fontSize: 12,
+                  }}
+                  labelStyle={{ color: "hsl(60 10% 92%)", fontWeight: 600 }}
+                  formatter={(value: number, _name: string, props: { payload: { count: number } }) => [
+                    `${value} km (${props.payload.count} runs)`,
+                    "Distance",
+                  ]}
+                />
+                <Bar dataKey="distance" radius={[4, 4, 0, 0]}>
+                  {weeklyVolume.map((_, i) => (
+                    <Cell
+                      key={i}
+                      fill={i === weeklyVolume.length - 1 ? "hsl(82 100% 50%)" : "hsl(82 100% 50% / 0.4)"}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        ) : (
+          <div className="h-48 flex items-center justify-center">
+            <p className="text-muted-foreground font-body text-sm">
+              No workout data yet. Sync your workouts to see volume trends.
+            </p>
+          </div>
+        )}
+      </div>
+
       {/* Recovery + Plan row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Recovery card */}
