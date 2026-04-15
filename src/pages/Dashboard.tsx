@@ -181,7 +181,10 @@ export default function Dashboard() {
         <div className="flex items-center gap-2 mb-4">
           <BarChart3 className="w-5 h-5 text-accent" />
           <h2 className="font-display text-lg text-foreground">WEEKLY VOLUME</h2>
-          <span className="text-muted-foreground font-body text-xs ml-auto">Last 4 weeks</span>
+          <span className="text-muted-foreground font-body text-xs ml-auto flex items-center gap-3">
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-primary inline-block" /> Distance</span>
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-secondary inline-block" /> Pace</span>
+          </span>
         </div>
         {weeklyVolume.some((w) => w.distance > 0) ? (
           <div className="h-48">
