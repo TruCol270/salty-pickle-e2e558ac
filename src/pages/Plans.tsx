@@ -16,6 +16,7 @@ interface Plan {
 }
 
 export default function Plans() {
+  const navigate = useNavigate();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
@@ -122,6 +123,7 @@ export default function Plans() {
                 <Button
                   variant="outline"
                   size="sm"
+                  onClick={() => navigate(`/app/plans/${plan.id}`)}
                   className="font-display text-xs uppercase tracking-wider border-border text-foreground hover:border-primary hover:text-primary shrink-0"
                 >
                   VIEW
